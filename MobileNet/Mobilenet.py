@@ -30,10 +30,10 @@ class _depthwise_separable_convolution(nn.Module):
         out_channels = int(a*out_channels)
         in_channels = int(a*in_channels)
         self.dwsc_layer = nn.Sequential(
-            nn.Conv2d(in_channels, in_channels, 3, stride, padding=1, groups=in_channels),
+            nn.Conv2d(in_channels, in_channels, 3, stride, padding=1 , groups=in_channels),
             nn.BatchNorm2d(in_channels),
             nn.ReLU(),
-            nn.Conv2d(in_channels, out_channels, 1),
+            nn.Conv2d(in_channels, out_channels, 1, 1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU()
         )
@@ -48,9 +48,9 @@ class _depthwise_separable_convolution(nn.Module):
 class MobileNet(nn.Module):
     def __init__(self, input_channels: int, depth_multiplier: float, resolution_multiplier: float):
         super().__init__()
-        self.base_model_layers_sizes = [32, 64, 128, 128, 256, 256, *[512 for i in range(5)], 512, 1024]
-        self.strides = [1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2]
-        self.n_layers = 12
+        self.base_model_layers_sizes = [32, 64, 128, 128, 256, 256, *[512 for i in range(5)], 512, 1024, 1024]
+        self.strides = [1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1]
+        self.n_layers = 13
         self.a = depth_multiplier
         self.input_size = int(224 * resolution_multiplier)
         self.input_channels = input_channels
@@ -70,7 +70,7 @@ class MobileNet(nn.Module):
         self.Flattener = nn.Flatten()
         self.Linear1 = nn.Linear(flattened_size, 1)
         self.Output = nn.Sigmoid()
-        self.resizer = T.transforms.Resize((self.input_size, self.input_size))
+        self.resizer = T.Resize((self.input_size, self.input_size))
 
     def forward(self, x):
         x = self.resizer(x)
