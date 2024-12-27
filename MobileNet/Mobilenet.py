@@ -42,9 +42,6 @@ class _depthwise_separable_convolution(nn.Module):
         
 
     def forward(self, x):
-        old_size = x.shape[2]
-        new_size = int(old_size* self.p)
-        resizer = T.Resize((new_size, new_size))
         x = self.layer(x)
 
         return x
@@ -73,7 +70,7 @@ class MobileNet(nn.Module):
                 self.p
             ) for i in range(self.n_layers)
         ])
-        self.Pool = nn.AvgPool2d(7)
+        self.Pool = nn.AvgPool2d()
         self.Flattener = nn.Flatten()
         self.Linear1 = nn.Linear(flattened_size, 1000)
         self.Linear2 = nn.Linear(1000, 1)
@@ -83,11 +80,18 @@ class MobileNet(nn.Module):
 
     def forward(self, x):
         x = self.ConvBlock1(x)
+        print(x.shape)
         for i in range(self.n_layers):
             x = self.dwsc[i](x)
+            print(x.shape)
+        print('right before pooling')
         x = self.Pool(x)
+        print('right after pooling',x.shape)
         x = self.Flattener(x)
         x = self.Linear1(x)
+        print(x.shape)
         x = self.Linear2(x)
+        print(x.shape)
         x = self.Output(x)
+        print('separator')
         return x
