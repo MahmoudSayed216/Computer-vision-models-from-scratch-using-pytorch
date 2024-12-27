@@ -68,8 +68,7 @@ class MobileNet(nn.Module):
         ])
         self.Pool = nn.AdaptiveAvgPool2d(1)
         self.Flattener = nn.Flatten()
-        self.Linear1 = nn.Linear(flattened_size, 1000)
-        self.Linear2 = nn.Linear(1000, 1)
+        self.Linear1 = nn.Linear(flattened_size, 1)
         self.Output = nn.Sigmoid()
         self.resizer = T.transforms.Resize((self.input_size, self.input_size))
 
@@ -81,6 +80,5 @@ class MobileNet(nn.Module):
         x = self.Pool(x)
         x = self.Flattener(x)
         x = self.Linear1(x)
-        x = self.Linear2(x)
         x = self.Output(x)
         return x
