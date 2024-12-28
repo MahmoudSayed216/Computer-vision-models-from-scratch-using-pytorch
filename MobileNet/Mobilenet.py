@@ -82,3 +82,46 @@ class MobileNet(nn.Module):
         x = self.Linear1(x)
         x = self.Output(x)
         return x
+
+
+
+
+
+
+
+
+
+
+# who should watch this series ? 
+
+# someone who want to get better at pytorch and learn how to implement models from scratch after reading the paper
+
+# better read the paper first, i'll revise the paper as quick as possible then proceed with the code
+
+# if you already know how to mobilenet works, you can skip to the beginning of implementation
+
+
+# input Df
+# filter Dk
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
